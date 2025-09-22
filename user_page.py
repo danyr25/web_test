@@ -12,9 +12,15 @@ import altair as alt
 #Connect spreadsheet
 
 # Define the scope (permissions) and authenticate
-scope = ["https://spreadsheets.google.com/feeds",
-          "https://www.googleapis.com/auth/drive"]
-creds = Credentials.from_service_account_file("pengirimannasional-test-e22b468e9586.json", scopes=scope)
+sa_info = json.loads(st.secrets["GCREDS"])
+sa_info["private_key"] = sa_info["private_key"].replace("\\n", "\n")
+creds = Credentials.from_service_account_info(
+          sa_info, 
+          scopes=[
+                    "https://www.googleapis.com/auth/spreadsheets",
+                    "https://www.googleapis.com/auth/drive"
+          ]
+)
 client = gspread.authorize(creds)
 
 #Open all table then convert to dataframe
